@@ -32,6 +32,12 @@ public class EmployeeServiceImpl  {
                 .orElseThrow(() -> new EmployeeNotFoundException(id));
     }
 
+    @Transactional(readOnly = true)
+    public Employee findByEmail(String email) {
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new EmployeeNotFoundException(email));
+    }
+
     // Update-only: throws 404 if not found
     public Employee updateExisting(Long id, Employee newEmployee) {
         Employee existing = repository.findById(id)

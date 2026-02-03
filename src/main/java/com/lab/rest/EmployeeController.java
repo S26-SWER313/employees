@@ -11,46 +11,55 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("/employees")
 class EmployeeController {
 
-    private final EmployeeService employeeService;
+    private final EmployeeServiceImpl employeeService;
 
-    EmployeeController(EmployeeService employeeService) {
+    EmployeeController(EmployeeServiceImpl employeeService) {
         this.employeeService = employeeService;
     }
 
     @GetMapping
-    List<Employee> all() {
-        return employeeService.findAll();
+    List<EmployeeResponseDto> all() {
+        return employeeService.findAll()
+                .stream()
+                .map(EmployeeMapper::toDto)
+                .toList();
     }
 
     // POST /employees -> 201 Created + Location: /employees/{id}
     @PostMapping
-    ResponseEntity<Employee> newEmployee(
-            @RequestBody Employee newEmployee,
+    ResponseEntity<EmployeeResponseDto> newEmployee(
+            @RequestBody EmployeeRequestDto newEmployee,
             UriComponentsBuilder uriBuilder
     ) {
-        Employee saved = employeeService.create(newEmployee);
+        Employee saved = employeeService.create(EmployeeMapper.toEntity(newEmployee));
+        EmployeeResponseDto employeeResponseDto = EmployeeMapper.toDto(saved);
 
         URI location = uriBuilder
                 .path("/employees/{id}")
                 .buildAndExpand(saved.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(saved);
+        return ResponseEntity.created(location).body(employeeResponseDto);
     }
 
     @GetMapping("/{id}")
-    Employee one(@PathVariable Long id) {
-        return employeeService.findById(id);
+    EmployeeResponseDto one(@PathVariable Long id) {
+        return EmployeeMapper.toDto(employeeService.findById(id));
+    }
+
+    @GetMapping("/email/{email}")
+    EmployeeResponseDto email(@PathVariable String email) {
+        return EmployeeMapper.toDto(employeeService.findByEmail(email));
     }
 
     // PUT update-only: 200 OK on update; 404 if missing
     @PutMapping("/{id}")
-    ResponseEntity<Employee> replaceEmployee(
+    ResponseEntity<EmployeeResponseDto> replaceEmployee(
             @PathVariable Long id,
-            @RequestBody Employee newEmployee
+            @RequestBody EmployeeRequestDto newEmployee
     ) {
-        Employee updated = employeeService.updateExisting(id, newEmployee);
-        return ResponseEntity.ok(updated);
+        Employee updated = employeeService.updateExisting(id, EmployeeMapper.toEntity(newEmployee));
+        return ResponseEntity.ok(EmployeeMapper.toDto(updated));
     }
 
     // DELETE -> 204 No Content; 404 if missing
