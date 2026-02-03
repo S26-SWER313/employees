@@ -1,4 +1,4 @@
-package com.lab.rest;
+package com.lab.rest.employees;
 
 import java.util.Objects;
 

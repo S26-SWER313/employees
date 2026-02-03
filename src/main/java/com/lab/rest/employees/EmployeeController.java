@@ -1,4 +1,4 @@
-package com.lab.rest;
+package com.lab.rest.employees;
 
 import java.net.URI;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/employees")
-class EmployeeController {
+public class EmployeeController {
 
     private final EmployeeServiceImpl employeeService;
 

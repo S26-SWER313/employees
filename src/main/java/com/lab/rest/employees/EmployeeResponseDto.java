@@ -1,4 +1,4 @@
-package com.lab.rest;
+package com.lab.rest.employees;
 
 public class EmployeeResponseDto {
 

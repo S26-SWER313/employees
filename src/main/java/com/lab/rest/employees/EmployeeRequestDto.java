@@ -1,6 +1,8 @@
-package com.lab.rest;
+package com.lab.rest.employees;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 public class EmployeeRequestDto {
@@ -14,6 +16,7 @@ public class EmployeeRequestDto {
     @NotBlank
     @Email
     private String email;
+
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

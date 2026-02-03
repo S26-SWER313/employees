@@ -2,6 +2,7 @@ package com.lab.rest;
 
 import java.time.Instant;
 
+import com.lab.rest.employees.EmployeeNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;

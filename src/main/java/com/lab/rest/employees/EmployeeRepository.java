@@ -1,10 +1,10 @@
-package com.lab.rest;
+package com.lab.rest.employees;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-interface EmployeeRepository extends JpaRepository<Employee, Long> {
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     Optional<Employee> findByEmail(String email);
 }
