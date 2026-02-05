@@ -7,14 +7,14 @@ import jakarta.validation.constraints.NotBlank;
 
 public class EmployeeRequestDto {
 
-    @NotBlank
+    @NotBlank(message = "Name must not be blank")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "Role must not be blank")
     private String role;
 
-    @NotBlank
-    @Email
+    @NotBlank(message = "Email must not be blank")
+    @Email(message = "Email should be valid")
     private String email;
 
 
