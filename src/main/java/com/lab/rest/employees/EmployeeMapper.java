@@ -17,7 +17,8 @@ public class EmployeeMapper {
                 e.getId(),
                 e.getName(),
                 e.getRole(),
-                e.getEmail()
+                e.getEmail(),
+                e.getDepartment() != null ? e.getDepartment().getName() : "No Department"
         );
     }
 }

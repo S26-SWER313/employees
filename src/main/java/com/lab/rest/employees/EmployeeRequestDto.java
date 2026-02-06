@@ -17,7 +17,6 @@ public class EmployeeRequestDto {
     @Email(message = "Email should be valid")
     private String email;
 
-
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 

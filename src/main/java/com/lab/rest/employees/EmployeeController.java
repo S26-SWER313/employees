@@ -3,6 +3,7 @@ package com.lab.rest.employees;
 import java.net.URI;
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -28,7 +29,7 @@ public class EmployeeController {
     // POST /employees -> 201 Created + Location: /employees/{id}
     @PostMapping
     ResponseEntity<EmployeeResponseDto> newEmployee(
-            @RequestBody EmployeeRequestDto newEmployee,
+            @Valid @RequestBody EmployeeRequestDto newEmployee,
             UriComponentsBuilder uriBuilder
     ) {
         Employee saved = employeeService.create(EmployeeMapper.toEntity(newEmployee));
@@ -56,7 +57,7 @@ public class EmployeeController {
     @PutMapping("/{id}")
     ResponseEntity<EmployeeResponseDto> replaceEmployee(
             @PathVariable Long id,
-            @RequestBody EmployeeRequestDto newEmployee
+            @Valid @RequestBody EmployeeRequestDto newEmployee
     ) {
         Employee updated = employeeService.updateExisting(id, EmployeeMapper.toEntity(newEmployee));
         return ResponseEntity.ok(EmployeeMapper.toDto(updated));

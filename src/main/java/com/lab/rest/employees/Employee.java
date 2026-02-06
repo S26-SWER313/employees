@@ -15,7 +15,6 @@ public class Employee {
     @Column(unique = true)
     private String email;
     private double salary;
-
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
@@ -48,6 +47,7 @@ public class Employee {
         return department;
     }
 
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -67,6 +67,8 @@ public class Employee {
     public void setDepartment(Department department) {
         this.department = department;
     }
+
+
 
     @Override
     public boolean equals(Object o) {
