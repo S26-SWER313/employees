@@ -12,6 +12,30 @@ public class PagedResponse<T> {
     private int totalPages;
     private boolean last;
 
+    public List<T> getContent() {
+        return content;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public long getTotalElements() {
+        return totalElements;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
+    }
+
+    public boolean isLast() {
+        return last;
+    }
+
     public void setContent(List<T> content) {
         this.content = content;
     }

@@ -1,9 +1,12 @@
 package com.lab.rest.employees;
 
 import java.net.URI;
-import java.util.List;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -19,11 +22,19 @@ public class EmployeeController {
     }
 
     @GetMapping
-    List<EmployeeResponseDto> all() {
-        return employeeService.findAll()
-                .stream()
-                .map(EmployeeMapper::toDto)
-                .toList();
+    public ResponseEntity<PagedResponse<EmployeeResponseDto>> listEmployees(
+            // pagination + sorting handled automatically by Spring
+            @PageableDefault(size = 10)
+            @SortDefault.SortDefaults({
+                    @SortDefault(sort = "id", direction = Sort.Direction.DESC)
+            })
+            Pageable pageable,
+
+            // filters (optional)
+            @RequestParam(required = false) String role,
+            @RequestParam(required = false) String nameContains
+    ) {
+        return ResponseEntity.ok(employeeService.listEmployees(pageable, role, nameContains));
     }
 
     // POST /employees -> 201 Created + Location: /employees/{id}
