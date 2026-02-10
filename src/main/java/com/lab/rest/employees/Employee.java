@@ -1,5 +1,6 @@
 package com.lab.rest.employees;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 import com.lab.rest.departments.Department;
@@ -9,7 +10,8 @@ import jakarta.persistence.*;
 public class Employee {
 
     private @Id
-    @GeneratedValue Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
     private String name;
     private String role;
     @Column(unique = true)
@@ -19,12 +21,18 @@ public class Employee {
     @JoinColumn(name = "department_id")
     private Department department;
 
+    private Integer yearsOfExperience;
+    private LocalDate hiredDate;
+
     public Employee() {}
 
-    public Employee(String name, String role) {
+    public Employee(String name, String role, String email, Integer yearsOfExperience, LocalDate hiredDate) {
 
         this.name = name;
         this.role = role;
+        this.email = email;
+        this.yearsOfExperience = yearsOfExperience;
+        this.hiredDate = hiredDate;
     }
 
     public Long getId() {
@@ -47,6 +55,17 @@ public class Employee {
         return department;
     }
 
+    public double getSalary() {
+        return salary;
+    }
+
+    public Integer getYearsOfExperience() {
+        return yearsOfExperience;
+    }
+
+    public LocalDate getHiredDate() {
+        return hiredDate;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -68,7 +87,17 @@ public class Employee {
         this.department = department;
     }
 
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
 
+    public void setHiredDate(LocalDate hiredDate) {
+        this.hiredDate = hiredDate;
+    }
+
+    public void setYearsOfExperience(Integer yearsOfExperience) {
+        this.yearsOfExperience = yearsOfExperience;
+    }
 
     @Override
     public boolean equals(Object o) {
