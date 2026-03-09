@@ -4,17 +4,23 @@ import com.lab.rest.departments.Department;
 import com.lab.rest.departments.DepartmentRepository;
 import com.lab.rest.employees.Employee;
 import com.lab.rest.employees.EmployeeRepository;
+import com.lab.rest.security.AppUser;
+import com.lab.rest.security.AppUserRepository;
+import com.lab.rest.security.Role;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 @Configuration
 class LoadDatabase {
@@ -22,7 +28,8 @@ class LoadDatabase {
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
 
     @Bean
-    CommandLineRunner initDatabase(EmployeeRepository repository, DepartmentRepository departmentRepository) {
+    CommandLineRunner initDatabase(EmployeeRepository repository, DepartmentRepository departmentRepository,
+                                   AppUserRepository repo, PasswordEncoder encoder) {
 
         return args -> {
             // Prepare departments
@@ -78,6 +85,15 @@ class LoadDatabase {
                 repository.save(emp);
             }
 
+            if (repo.findByUsername("admin").isEmpty()) {
+                repo.save(new AppUser(null, "admin", encoder.encode("Admin@123"), true, Set.of(Role.ADMIN)));
+            }
+            if (repo.findByUsername("hr").isEmpty()) {
+                repo.save(new AppUser(null, "hr", encoder.encode("Hr@123"), true, Set.of(Role.HR)));
+            }
+            if (repo.findByUsername("employee1").isEmpty()) {
+                repo.save(new AppUser(null, "employee1", encoder.encode("Emp@123"), true, Set.of(Role.EMPLOYEE)));
+            }
             log.info("Loaded 50 employees with email, hiredDate and yearsOfExperience");
         };
     }
