@@ -25,7 +25,7 @@ public class JwtTokenService {
         this.accessTokenMinutes = accessTokenMinutes;
     }
 
-    public String generateAccessToken(String username, List<String> roles) {
+    public String generateAccessToken(String username, List<String> roles, Long employeeId) {
         Instant now = Instant.now();
         Instant exp = now.plusSeconds(accessTokenMinutes * 60);
 
@@ -35,6 +35,7 @@ public class JwtTokenService {
                 .expiresAt(exp)
                 .subject(username)
                 .claim("roles", roles)
+                .claim("empId", employeeId)
                 .build();
 
         JwsHeader header = JwsHeader.with(MacAlgorithm.HS256)

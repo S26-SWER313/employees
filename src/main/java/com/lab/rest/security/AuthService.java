@@ -43,7 +43,8 @@ public class AuthService {
         }
 
         List<String> roles = user.getRoles().stream().map(Enum::name).toList();
-        String accessToken = tokenService.generateAccessToken(user.getUsername(), roles);
+        Long employeeId = user.getEmployeeId(); // may be null for admin/hr
+        String accessToken = tokenService.generateAccessToken(user.getUsername(), roles, employeeId);
         String refreshToken = createRefreshToken(user);
 
         return new LoginResponse(
@@ -74,7 +75,8 @@ public class AuthService {
         }
 
         List<String> roles = user.getRoles().stream().map(Enum::name).toList();
-        String accessToken = tokenService.generateAccessToken(user.getUsername(), roles);
+        Long employeeId = user.getEmployeeId(); // may be null for admin/hr
+        String accessToken = tokenService.generateAccessToken(user.getUsername(), roles, employeeId);
 
         // Optionally rotate refresh token (create new one and delete old)
         String newRefreshToken = rotateRefreshToken(refreshToken);

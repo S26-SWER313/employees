@@ -25,14 +25,17 @@ public class AppUser {
     @Column(name = "role", nullable = false)
     private Set<Role> roles;
 
+    private Long employeeId;
+
     public AppUser() {}
 
-    public AppUser(Long id, String username, String passwordHash, boolean enabled, Set<Role> roles) {
+    public AppUser(Long id, String username, String passwordHash, boolean enabled, Set<Role> roles, Long employeeId) {
         this.id = id;
         this.username = username;
         this.passwordHash = passwordHash;
         this.enabled = enabled;
         this.roles = roles;
+        this.employeeId = employeeId;
     }
 
     public Long getId() {
@@ -55,6 +58,10 @@ public class AppUser {
         return passwordHash;
     }
 
+    public Long getEmployeeId() {
+        return employeeId;
+    }
+
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
     }
@@ -73,5 +80,9 @@ public class AppUser {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -22,6 +23,7 @@ public class EmployeeController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','HR')")
     public ResponseEntity<PagedResponse<EmployeeResponseDto>> listEmployees(
             // pagination + sorting handled automatically by Spring
             @PageableDefault(size = 10)
@@ -39,6 +41,7 @@ public class EmployeeController {
 
     // POST /employees -> 201 Created + Location: /employees/{id}
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN','HR')")
     ResponseEntity<EmployeeResponseDto> newEmployee(
             @Valid @RequestBody EmployeeRequestDto newEmployee,
             UriComponentsBuilder uriBuilder
@@ -55,6 +58,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','HR') or (hasRole('EMPLOYEE') and @authz.isSelf(#id, authentication))")
     EmployeeResponseDto one(@PathVariable Long id) {
         return EmployeeMapper.toDto(employeeService.findById(id));
     }
@@ -66,6 +70,7 @@ public class EmployeeController {
 
     // PUT update-only: 200 OK on update; 404 if missing
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','HR')")
     ResponseEntity<EmployeeResponseDto> replaceEmployee(
             @PathVariable Long id,
             @Valid @RequestBody EmployeeRequestDto newEmployee
@@ -76,6 +81,7 @@ public class EmployeeController {
 
     // DELETE -> 204 No Content; 404 if missing
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','HR')")
     ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
         employeeService.deleteByIdOrThrow(id);
         return ResponseEntity.noContent().build();
