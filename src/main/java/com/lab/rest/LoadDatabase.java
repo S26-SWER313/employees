@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+//seed database with sample data on startup
 @Configuration
 class LoadDatabase {
 

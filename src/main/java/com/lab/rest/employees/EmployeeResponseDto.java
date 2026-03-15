@@ -20,4 +20,5 @@ public class EmployeeResponseDto {
     public String getName() { return name; }
     public String getRole() { return role; }
     public String getEmail() { return email; }
+    public String getDepartmentName() { return departmentName; }
 }
