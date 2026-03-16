@@ -29,14 +29,18 @@ public class JwtTokenService {
         Instant now = Instant.now();
         Instant exp = now.plusSeconds(accessTokenMinutes * 60);
 
-        JwtClaimsSet claims = JwtClaimsSet.builder()
+        JwtClaimsSet.Builder builder = JwtClaimsSet.builder()
                 .issuer(issuer)
                 .issuedAt(now)
                 .expiresAt(exp)
                 .subject(username)
-                .claim("roles", roles)
-                .claim("empId", employeeId)
-                .build();
+                .claim("roles", roles); // make sure roles is never null
+
+        if (employeeId != null) {
+            builder.claim("empId", employeeId);
+        }
+
+        JwtClaimsSet claims = builder.build();
 
         JwsHeader header = JwsHeader.with(MacAlgorithm.HS256)
                 .type("JWT")
