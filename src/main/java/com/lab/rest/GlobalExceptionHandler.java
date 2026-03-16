@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ public class GlobalExceptionHandler {
             EmployeeNotFoundException ex,
             HttpServletRequest request
     ) {
+        log.error(ex.toString());
         ApiError body = new ApiError(
                 Instant.now().toString(),
                 404,
@@ -60,7 +62,7 @@ public class GlobalExceptionHandler {
                 .map(error -> error.getDefaultMessage())
                 .reduce((msg1, msg2) -> msg1 + "; " + msg2)
                 .orElse("Validation failed");
-
+        log.error(ex.toString());
         ApiError body = new ApiError(
                 Instant.now().toString(),
                 400,
@@ -69,5 +71,21 @@ public class GlobalExceptionHandler {
                 request.getRequestURI()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ApiError> handleAuthorizationDenied(
+            AuthorizationDeniedException ex,
+            HttpServletRequest request
+    ) {
+        log.error(ex.toString());
+        ApiError body = new ApiError(
+                Instant.now().toString(),
+                403,
+                "Forbidden",
+                "You don't have permission to access this resource",
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(body);
     }
 }
